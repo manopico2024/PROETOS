@@ -1,0 +1,122 @@
+# -*- coding: utf-8 -*-
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_root(object):
+    def setupUi(self, root):
+        root.setObjectName("root")
+        root.resize(440, 450)
+        root.setAutoFillBackground(False)
+        root.setStyleSheet("background-color: rgb(170, 170, 127);")
+        self.centralwidget = QtWidgets.QWidget(root)
+        self.centralwidget.setObjectName("centralwidget")
+
+        self.logo = QtWidgets.QLabel(self.centralwidget)
+        self.logo.setGeometry(QtCore.QRect(10, 360, 101, 80))
+        self.logo.setText("")
+        self.logo.setPixmap(QtGui.QPixmap("../Users/MANO/Desktop/BACKUP/Catalogo1/img/BRASIL.png"))
+        self.logo.setObjectName("logo")
+
+        # QLabel para o título
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(10, 10, 101, 31))
+        self.label_2.setObjectName("label_2")
+
+        # QLabel para o rodapé
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(330, 420, 101, 21))
+        self.label_3.setObjectName("label_3")
+
+        # Campo de entrada para o primeiro número
+        self.entry_altura = QtWidgets.QLineEdit(self.centralwidget)
+        self.entry_altura.setGeometry(QtCore.QRect(140, 130, 181, 20))
+        self.entry_altura.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.entry_altura.setObjectName("entry_num1")
+
+        # Campo de entrada para o segundo número
+        self.entry_peso = QtWidgets.QLineEdit(self.centralwidget)
+        self.entry_peso.setGeometry(QtCore.QRect(140, 160, 181, 20))
+        self.entry_peso.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.entry_peso.setObjectName("entry_num2")
+
+ ##       self.entry_valor3.setGeometry(QtCore.QRect(140, 190, 181, 20))
+#        self.entry_valor3.setStyleSheet("background-color: rgb(255, 255, 255);")
+    #    self.entry_valor3.setObjectName("entry_valor3")
+        # Botão para calcular
+        self.btn_calcular = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_calcular.setGeometry(QtCore.QRect(140, 220, 75, 23))
+        self.btn_calcular.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.btn_calcular.setObjectName("btn_calcular")
+
+        # QLabel para exibir o resultado do imc
+        self.label_resultado = QtWidgets.QLabel(self.centralwidget)
+        self.label_resultado.setGeometry(QtCore.QRect(140, 290, 181, 20))
+        self.label_resultado.setStyleSheet("background-color: rgb(255, 255, 255);font-size: 12pt;")
+        self.label_resultado.setAlignment(QtCore.Qt.AlignLeft)
+        self.label_resultado.setObjectName("label_resultado")
+                # Classificação do IMC
+        self.label_classificacao = QtWidgets.QLabel(self.centralwidget)
+        self.label_classificacao.setGeometry(QtCore.QRect(140, 250, 200, 20))
+        self.label_classificacao.setAlignment(QtCore.Qt.AlignLeft)
+        self.label_classificacao.setStyleSheet("background-color: rgb(255, 255, 255); font-size: 12pt;")
+        self.label_classificacao.setObjectName("label_classificacao")
+
+        root.setCentralWidget(self.centralwidget)
+
+        self.retranslateUi(root)
+        QtCore.QMetaObject.connectSlotsByName(root)
+
+        # Conectar o botão à função
+        self.btn_calcular.clicked.connect(self.calcular_imc)
+
+    def retranslateUi(self, root):
+        _translate = QtCore.QCoreApplication.translate
+        root.setWindowTitle(_translate("root", "Calculadora"))
+        self.label_2.setText(_translate("root", "<html><head/><body><p><span style=\" font-size:14pt;\">Calculadora</span></p><p><br/></p></body></html>"))
+        self.label_3.setText(_translate("root", "<html><head/><body><p><span style=\" font-size:11pt; font-weight:600; color:#0000ff;\">MANODEVs</span></p></body></html>"))
+        self.btn_calcular.setText(_translate("root", "CALCULAR"))
+        self.label_resultado.setText(_translate("root", "Resultado"))
+        self.label_classificacao.setText(_translate("root", "Classificação"))
+
+    def calcular_imc(self):
+        try:
+            # Obter peso e altura do usuário
+            peso = float(self.entry_peso.text())
+            altura = float(self.entry_altura.text())
+
+            # Calcular o IMC
+            imc = peso / (altura ** 2)
+
+            # Determinar a classificação
+            if imc < 18.5:
+                classificacao = "Abaixo do peso"
+            elif 18.5 <= imc < 24.9:
+                classificacao = "Peso normal"
+            elif 25 <= imc < 29.9:
+                classificacao = "Sobrepeso"
+            elif 30 <= imc < 34.9:
+                classificacao = "Obesidade grau 1"
+            elif 35 <= imc < 39.9:
+                classificacao = "Obesidade grau 2"
+            else:
+                classificacao = "Obesidade grau 3"
+
+            # Exibir o resultado e a classificação
+            self.label_resultado.setText(f"Seu IMC: {imc:.2f}")
+            self.label_classificacao.setText(f"Classificação: {classificacao}")
+
+        except ValueError:
+            # Exibir erro se os valores não forem válidos
+            self.label_resultado.setText("Erro: Entrada inválida")
+            self.label_classificacao.setText("")
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    root = QtWidgets.QMainWindow()
+    ui = Ui_root()
+    ui.setupUi(root)
+    root.show()
+    sys.exit(app.exec_())
